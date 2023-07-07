@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Registros {
+  id          Int     @id @default(autoincrement())
+  sku         String
+  marketplace Marketplaces @relation(fields: [marketplaceNome], references: [nome])
+  marketplaceNome String
+  preco       Float
+  margem      Float
+  calculadora Calculadoras @relation(fields: [calculadoraNome], references: [nome]) 
+  calculadoraNome String
+}
+
+model Marketplaces {
+  id          Int  @id @default(autoincrement())
+  nome        String @unique
+  registros   Registros[]
+}
+
+model Calculadoras {
+  id            Int           @id @default(autoincrement())
+  nome          String        @unique
+  registros     Registros[]
+}
